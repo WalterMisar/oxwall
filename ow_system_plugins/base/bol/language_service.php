@@ -63,11 +63,22 @@ class BOL_LanguageService
             return;
         }
 
-        $filename = $this->languageCacheDir . $this->getCacheFilename($this->getCurrent()->getId());
+	$lang = $this->getCurrent()->getId();
+	$fallback = 1;
+
+        $filename = $this->languageCacheDir . $this->getCacheFilename($lang);
         $language = array();
 
         // include cache file
         include $filename;
+
+	if ($lang != $fallback)
+	{
+            $filename = $this->languageCacheDir . $this->getCacheFilename($fallback);
+
+            // include fallback cache file
+            include $filename;
+	}
 
         $this->language = $language;
     }

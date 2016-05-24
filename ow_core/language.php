@@ -74,9 +74,17 @@ class OW_Language
         }
 
         $text = null;
+	$lang = null;
+	$fallback = 1;
+
         try
         {
-            $text = BOL_LanguageService::getInstance()->getText(BOL_LanguageService::getInstance()->getCurrent()->getId(), $prefix, $key, $vars);
+	    $lang = BOL_LanguageService::getInstance()->getCurrent()->getId();
+            $text = BOL_LanguageService::getInstance()->getText($lang, $prefix, $key, $vars);
+	    if ( $text === null && $lang != $fallback )
+	    {
+		$text = BOL_LanguageService::getInstance()->getText($fallback, $prefix, $key, $vars);
+	    }
         }
         catch ( Exception $e )
         {
